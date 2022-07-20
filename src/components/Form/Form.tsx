@@ -1,30 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { IMovie } from '../../interface/IMovie';
+import Card from '../Card/Card';
 
 const Form = () => {
-  const [moviesData, setMoviesData] = useState<Movie[]>([]);
-
-  interface Movie {
-    adult: boolean;
-    backdrop_path: string;
-    genre_ids: number[];
-    id: number;
-    original_language: string;
-    original_title: string;
-    overview: string;
-    popularity: number;
-    poster_path: string;
-    release_date: string;
-    title: string;
-    video: boolean;
-    vote_average: number;
-    vote_count: number;
-  }
+  const [moviesData, setMoviesData] = useState<IMovie[]>([]);
 
   useEffect(() => {
     axios
       .get(
-        `https://api.themoviedb.org/3/search/movie?api_key=debe018b315b4afff20a1dc22c5e84f3&query=star&language=fr-FR`
+        `https://api.themoviedb.org/3/search/movie?api_key=debe018b315b4afff20a1dc22c5e84f3&query=avenger&language=fr-FR`
       )
       .then((res) => setMoviesData(res.data.results));
   }, []);
@@ -47,8 +32,8 @@ const Form = () => {
         </div>
       </div>
       <div className="result">
-        {moviesData.map((movie) => (
-          <h2 key={movie.id}>{movie.title}</h2>
+        {moviesData.slice(0, 12).map((movie) => (
+          <Card key={movie.id} movie={movie} />
         ))}
       </div>
     </div>
