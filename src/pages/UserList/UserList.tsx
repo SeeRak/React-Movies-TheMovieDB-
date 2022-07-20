@@ -1,11 +1,12 @@
 import React from 'react';
+import Header from '../../components/Header/Header';
 
 const UserList = () => {
-    return (
-        <div>
-            <h1>USER LIST</h1>
-        </div>
-    );
+  return (
+    <div>
+      <Header />
+    </div>
+  );
 };
 
 export default UserList;
