@@ -74,6 +74,22 @@ const Card = (props: { movie: IMovie }) => {
     return genreArray.map((genre) => <li key={genre}>{genre}</li>);
   };
 
+  const addStorage = () => {
+    const storeData = localStorage.getItem('favorites');
+    const storeDataArray = storeData ? JSON.parse(storeData) : [];
+    if (!storeDataArray.includes(props.movie.id)) {
+      storeDataArray.push(props.movie.id);
+      localStorage.setItem('favorites', JSON.stringify(storeDataArray));
+    }
+  };
+
+  const deleteStorage = () => {
+    const storeData = localStorage.getItem('favorites');
+    const storeDataArray = storeData ? storeData.split(',') : [];
+    const filter = storeDataArray.filter((id) => id !== props.movie.id.toString());
+    localStorage.setItem('favorites', filter.join(','));
+  };
+
   return (
     <div className="card">
       <img
@@ -92,11 +108,22 @@ const Card = (props: { movie: IMovie }) => {
       <h4>
         {props.movie.vote_average}/10 <span>⭐</span>
       </h4>
-      <ul>{genreFinder()}</ul>
+      <ul>
+        {props.movie.genre_ids
+          ? genreFinder()
+          : props.movie.genres.map((genre) => <li key={genre.id}>{genre.name}</li>)}
+      </ul>
       {props.movie.overview ? <h3>Synopsis</h3> : ''}
       <p>{props.movie.overview}</p>
-
-      <div className="btn">Ajouter aux coups de coeur</div>
+      {props.movie.genre_ids ? (
+        <div className="btn" onClick={() => addStorage()}>
+          Ajouter aux coups de coeur
+        </div>
+      ) : (
+        <div className="btn" onClick={() => deleteStorage()}>
+          Supprimer de la liste
+        </div>
+      )}
     </div>
   );
 };
